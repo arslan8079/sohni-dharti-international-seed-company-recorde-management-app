@@ -1,13 +1,13 @@
 <?php
 session_start();
-include "record-logic.php";
+include "stamp_logic.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sohni Dharti International | Records</title>
+<title>Sohni Dharti International | Stamps</title>
  <link rel="icon" type="image/x-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ9FIZonqEIfAq0iQ5XUGeBKmZ7TNCxDolt_kFF2y-AXrZROBfA-Gy0_E&s=10">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -58,8 +58,8 @@ include "record-logic.php";
 <body class="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-400/10 text-slate-700">
 
 <div class="container mx-auto max-w-6xl px-4 py-6 md:py-10">
-
-  <!-- Header -->
+ 
+    <!-- Header -->
   <?php include "header.php" ?>
 
   <?php
@@ -82,13 +82,6 @@ include "record-logic.php";
       </form>
 
       <div class="flex flex-wrap items-center gap-2">
-        <form method="POST" class="m-0" hidden>
-          <button type="submit" name="backup_db" class="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm ring-1 ring-brand-200 transition hover:bg-brand-50 active:scale-95">
-            <i class="fa-solid fa-download"></i>
-            Backup DB
-          </button>
-        </form>
-
         <button type="button" id="exp_btn" class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 px-6 py-3 text-sm font-semibold text-brand-900 shadow-soft transition hover:shadow-lg hover:scale-[1.02] active:scale-95">
           <i class="fa-solid fa-plus transition group-hover:rotate-90"></i>
           Add New
@@ -103,9 +96,9 @@ include "record-logic.php";
       <table id="myTable" class="w-full min-w-[640px] text-left text-sm">
         <thead>
           <tr class="bg-gradient-to-r from-brand-700 to-brand-600 text-white">
-            <th class="px-5 py-4 font-semibold">Name</th>
-            <th class="px-5 py-4 font-semibold">Address</th>
-            <th class="px-5 py-4 font-semibold">Area</th>
+            <th class="px-5 py-4 font-semibold">Party Name</th>
+            <th class="px-5 py-4 font-semibold">Stamp</th>
+            <th class="px-5 py-4 font-semibold">Order</th>
             <th class="px-5 py-4 font-semibold text-center">Delete</th>
             <th class="px-5 py-4 font-semibold text-center">Update</th>
           </tr>
@@ -115,20 +108,20 @@ include "record-logic.php";
           while($rec = mysqli_fetch_array($select)){
           ?>
           <tr class="transition hover:bg-brand-50/70">
-            <td class="px-5 py-3.5 font-medium text-slate-700"><?php echo htmlspecialchars($rec['Name']); ?></td>
-            <td class="px-5 py-3.5 text-slate-600"><?php echo htmlspecialchars($rec['Adress']); ?></td>
-            <td class="px-5 py-3.5 text-slate-600"><?php echo htmlspecialchars($rec['Area']); ?></td>
+            <td class="px-5 py-3.5 font-medium text-slate-700"><?php echo htmlspecialchars($rec['party']); ?></td>
+            <td class="px-5 py-3.5 text-slate-600"><?php echo htmlspecialchars($rec['stamp']); ?></td>
+            <td class="px-5 py-3.5 text-slate-600"><?php echo htmlspecialchars($rec['order']); ?></td>
             <td class="px-5 py-3.5 text-center">
-              <a id="dlt_btn" href="?delet=<?php echo $rec['Id']; ?>" onclick="return confirm('Delete this record?');" class="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-600 active:scale-95">
+              <a id="dlt_btn" href="?delet=<?php echo $rec['id']; ?>" onclick="return confirm('Delete this stamp?');" class="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-red-600 active:scale-95">
                 <i class="fa-solid fa-trash"></i> Delete
               </a>
             </td>
             <td class="px-5 py-3.5 text-center">
               <button type="button" class="upd_btn inline-flex items-center gap-1.5 rounded-full bg-brand-600 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-brand-700 active:scale-95"
-                data-id="<?php echo $rec['Id']; ?>"
-                data-name="<?php echo htmlspecialchars($rec['Name'], ENT_QUOTES); ?>"
-                data-address="<?php echo htmlspecialchars($rec['Adress'], ENT_QUOTES); ?>"
-                data-area="<?php echo htmlspecialchars($rec['Area'], ENT_QUOTES); ?>">
+                data-id="<?php echo $rec['id']; ?>"
+                data-name="<?php echo htmlspecialchars($rec['party'], ENT_QUOTES); ?>"
+                data-address="<?php echo htmlspecialchars($rec['stamp'], ENT_QUOTES); ?>"
+                data-area="<?php echo htmlspecialchars($rec['order'], ENT_QUOTES); ?>">
                 <i class="fa-solid fa-pen"></i> Update
               </button>
             </td>
@@ -160,15 +153,15 @@ include "record-logic.php";
     <form id="frm1" method="POST" class="space-y-4">
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Name</label>
-        <input type="text" placeholder="Enter Name" name="m_name" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" placeholder="Enter Name" name="party" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Address</label>
-        <input type="text" placeholder="Enter Address" name="m_adress" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" placeholder="Enter Address" name="stamp" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Area</label>
-        <input type="text" placeholder="Enter Area" name="m_area" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" placeholder="Enter Area" name="order" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div class="flex justify-end gap-3 pt-2">
         <button type="button" id="cancelModal" class="rounded-full px-6 py-2.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-100">Cancel</button>
@@ -196,15 +189,15 @@ include "record-logic.php";
       <input type="hidden" name="u_id" id="u_id">
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Name</label>
-        <input type="text" id="u_name" placeholder="Enter Name" name="u_name" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" id="u_name" placeholder="Enter Name" name="party" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Address</label>
-        <input type="text" id="u_address" placeholder="Enter Address" name="u_adress" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" id="u_address" placeholder="Enter Address" name="stamp" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div>
         <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-brand-700">Area</label>
-        <input type="text" id="u_area" placeholder="Enter Area" name="u_area" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
+        <input type="text" id="u_area" placeholder="Enter Area" name="order" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
       </div>
       <div class="flex justify-end gap-3 pt-2">
         <button type="button" id="cancelUpdateModal" class="rounded-full px-6 py-2.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-100">Cancel</button>
